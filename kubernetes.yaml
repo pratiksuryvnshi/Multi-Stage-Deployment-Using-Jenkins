@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-cloudbuild
+  labels:
+    app: hello-cloudbuild
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-cloudbuild
+  template:
+    metadata:
+      labels:
+        app: hello-cloudbuild
+    spec:
+      containers:
+      - name: hello-cloudbuild
+        image: gcr.io/poetic-bison-439113-i4/hello-cloudbuild:v1
+        ports:
+        - containerPort: 8082
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: hello-cloudbuild
+spec:
+  selector:
+    app: hello-cloudbuild
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8082
+  type: LoadBalancer
